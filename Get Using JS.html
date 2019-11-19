@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<style>
+table,th,td {
+  border : 1px solid black;
+  border-collapse: collapse;
+}
+th,td {
+  padding: 5px;
+}
+</style>
+<body>
+
+<h2>Cats</h2>
+
+<button type="button" onclick="loadDoc()">More Cats</button>
+<br><br>
+<p id="demo"></p>
+
+<script>
+function loadDoc(){
+	sendRequest("https://api.thecatapi.com/v1/images/search", fun1);
+}
+
+function fun1(xhtml){
+	var text = JSON.parse(xhtml.response);
+	var url = JSON.stringify(text[0].url);
+	document.getElementById("demo").innerHTML = "<img src=" + url + "/>";
+}
+
+function sendRequest(url, fun) {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      fun(this);
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.send();
+}
+</script>
+
+</body>
+</html>

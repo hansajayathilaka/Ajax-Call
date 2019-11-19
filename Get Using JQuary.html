@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table,th,td {
+  border : 1px solid black;
+  border-collapse: collapse;
+}
+th,td {
+  padding: 5px;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+
+<h2>Cats</h2>
+
+<button type="button" onclick="loadDoc2()">More Cats</button>
+<br><br>
+<img src="" id="demo"/>
+
+<script>
+function loadDoc2(){
+	$.get(
+		"https://api.thecatapi.com/v1/images/search",
+		{},
+		function (result){
+			$("#demo").attr("src", result[0].url);
+			$("#demo").css({"width": result[0].width, "height": result[0].height});
+		},
+		"json",
+	);
+}
+
+
+function loadDoc(){
+	$.ajax({
+		url:  "https://api.thecatapi.com/v1/images/search",
+		type: "get",
+		dataType: "json",
+		beforeSend: function () {
+			$("button").attr("disabled", true);
+		},
+		success: function (result){
+			$("#demo").attr("src", result[0].url);
+			$("#demo").css({"width": result[0].width, "height": result[0].height});
+		},
+		error: function (xhr) {
+			$("#demo").attr("src", "");
+			$("#demo").css({"width": 100, "height": 100});
+			$("#demo").attr("alt", "Error is occured while Loding the Image.");
+			console.log(xhr.responseJSON.message);
+		},
+	})
+	.done(function (data){
+	$("button").attr("disabled", false);
+		console.log("Ajax Call is Done.");
+	});
+}
+
+</script>
+
+</body>
+</html>

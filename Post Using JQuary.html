@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table,th,td {
+  border : 1px solid black;
+  border-collapse: collapse;
+}
+th,td {
+  padding: 5px;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+
+<h2>Submit Data Form</h2>
+<form>
+Name : <input type="text" id="name" value="morpheus"/><br>
+Job : <input type="text" id="job" value="leader"/><br>
+<button type="button" onclick="loadDoc2()">Submit Data</button>
+</form>
+<br><br>
+<p></p>
+
+<script>
+function loadDoc2(){
+	$.post(
+		"https://reqres.in/api/users",
+		{
+			"name": $("#name").val(),
+			"job": $("#job").val(),
+		},
+		function (result){
+			var hrmlString = "Name : " + result.name + "<br>Job : " + result.job + "<br>ID : " + result.id + "<br>Created At : " + result.createdAt;
+			$("p").html(hrmlString);
+		},
+		"json",
+	);
+}
+
+
+function loadDoc(){
+	$.ajax({
+		url:  "https://reqres.in/api/users",
+		type: "post",
+		data: {
+			"name": $("#name").val(),
+			"job": $("#job").val(),
+		},
+		dataType: "json",
+		beforeSend: function () {
+			$("button").attr("disabled", true);
+		},
+		success: function (result){
+			var hrmlString = "Name : " + result.name + "<br>Job : " + result.job + "<br>ID : " + result.id + "<br>Created At : " + result.createdAt;
+			$("p").html(hrmlString);
+		},
+		error: function (xhr) {
+			$("p").html(xhr.responseJSON.message);
+			console.log(xhr.responseJSON.message);
+		},
+	})
+	.done(function (data){
+	$("button").attr("disabled", false);
+		console.log("Ajax Call is Done.");
+	});
+}
+
+</script>
+
+</body>
+</html>
